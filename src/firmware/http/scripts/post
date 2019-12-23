@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+curl -d 'ssid=my-network&password=my-password' -X POST http://localhost:8080
