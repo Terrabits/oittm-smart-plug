@@ -24,7 +24,7 @@ class SmartPlug(object):
             self.state = 'on'
             self.led.off()
             self.relay.on()
-        self.notify_observers()
+        self.notify_toggle_observers()
 
     def off(self):
         if self.state == 'off':
@@ -35,7 +35,7 @@ class SmartPlug(object):
             self.state = 'off'
             self.led.on()
             self.relay.off()
-        self.notify_observers()
+        self.notify_toggle_observers()
 
     def toggle(self):
         if self.state == 'on':
