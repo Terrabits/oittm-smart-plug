@@ -19,10 +19,14 @@ def is_http_post(data):
     return is_http_method(data, b'POST')
 
 
-def posted_content_dict(data):
-    result = dict()
-    content     = list(filter(None, data.strip().split(crlf.encode())))[-1]
-    expressions = content.split(b'&')
+def content_from(data):
+    content = list(filter(None, data.strip().split(crlf.encode())))[-1]
+    return content.decode()
+
+
+def content_dict_from(data):
+    result      = dict()
+    expressions = content_from(data).split(b'&')
     for expression in expressions:
         key, value = expression.split(b'=')
         result[key.decode()] = value.decode()
