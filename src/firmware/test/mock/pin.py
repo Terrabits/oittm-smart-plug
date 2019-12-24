@@ -13,7 +13,7 @@ class Pin(object):
         self.button_callback = None
 
     def __str__(self):
-        return f'<Pin index={self.index} io={self.io} state={self.state}>'
+        return '<Pin index={index} io={io} state={state}>'.format(index=self.index, io=self.io, state=self.state)
 
     def __repr__(self):
         return str(self)

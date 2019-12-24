@@ -1,7 +1,7 @@
 crlf                 = '\r\n'
-get_response_header  = f'HTTP/1.1 200 OK{crlf}Content-Type: text/html{2 * crlf}'
+get_response_header  = 'HTTP/1.1 200 OK{crlf}Content-Type: text/html{crlf}{crlf}'.format(crlf=crlf)
 get_response_header  = get_response_header.encode()
-post_response_header = f'HTTP/1.1 200 OK{crlf}Content-Type: text/html{2 * crlf}'
+post_response_header = 'HTTP/1.1 200 OK{crlf}Content-Type: text/html{crlf}{crlf}'.format(crlf=crlf)
 post_response_header = post_response_header.encode()
 
 
@@ -30,8 +30,8 @@ def posted_content_dict(data):
 
 
 def generate_page(title, text):
-    page  = f'<html><head><title>{title}</title></head>'
-    page += f'<body>{text}</body></html>'
+    page  = '<html><head><title>{title}</title></head>'.format(title=title)
+    page += '<body>{text}</body></html>'.format(text=text)
     return page.encode()
 
 

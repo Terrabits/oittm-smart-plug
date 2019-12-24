@@ -23,7 +23,7 @@ while True:
             print('responding to get')
             connection.sendall(response('HTTP', 'Hello world!'))
         elif is_http_post(data):
-            print(f'received post with {posted_content_dict(data)}')
+            print('received post with {data}'.format(dict=posted_content_dict(data)))
             connection.sendall(response('HTTP', 'Connecting to wifi...'))
     finally:
         connection.close()
