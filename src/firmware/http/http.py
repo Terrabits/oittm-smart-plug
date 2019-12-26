@@ -20,16 +20,21 @@ def is_http_post(data):
 
 
 def content_from(data):
-    content = list(filter(None, data.strip().split(crlf.encode())))[-1]
-    return content.decode()
+    if type(data) == bytes:
+        data = data.decode()
+    content = list(filter(None, data.strip().split(crlf)))[-1]
+    return content
 
 
 def content_dict_from(data):
+    print('data type: {0}'.format(type(data)))
+    if type(data) == bytes:
+        data = data.decode()
     result      = dict()
-    expressions = content_from(data).split(b'&')
+    expressions = content_from(data).split('&')
     for expression in expressions:
-        key, value = expression.split(b'=')
-        result[key.decode()] = value.decode()
+        key, value = expression.split('=')
+        result[key] = value
     return result
 
 
