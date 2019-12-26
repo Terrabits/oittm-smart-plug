@@ -3,31 +3,29 @@ import network
 
 class Wifi:
     def __init__(self):
-        self.wlan  = None
+        self.station      = network.WLAN(network.STA_IF)
+        self.access_point = network.WLAN(network.AP_IF)
 
-    def configure_access_point(self, ssid, password, with_hostname='oittm-smart-plug'):
-        self.disconnect()
-        self.wlan = network.WLAN(network.AP_IF)
-        self.wlan.active(True)
-        self.wlan.config(essid=ssid, password=password, dhcp_hostname=with_hostname)
+    def configure_access_point(self, essid, password):
+        self.station.active(False)
+        self.access_point.active(True)
 
-    def wait_for_access_point_active(self):
-        while self.wlan.active() == False:
-            pass
+        # config
+        self.access_point.config(essid=essid)
+        self.access_point.config(authmode=network.AUTH_WPA2_PSK)
+        self.access_point.config(password=password)
 
+    # connect to wifi
     def connect(self, ssid, password, with_hostname='oittm-smart-plug'):
-        self.disconnect()
-        self.wlan = network.WLAN(network.STA_IF)
-        self.wlan.active(True)
-        self.wlan.config(dhcp_hostname=with_hostname)
-        self.wlan.connect(ssid, password)
+        self.access_point.active(False)
+        self.station.active(True)
+
+        self.station.config(dhcp_hostname=with_hostname)
+        self.station.connect(ssid, password)
 
     def wait_for_station_connect(self):
-        while not self.wlan.isconnected():
+        while not self.station.isconnected():
             pass
 
     def disconnect(self):
-        if not self.wlan:
-            return
-        self.wlan.active(False)
-        self.wlan = None
+        self.station.disconnect()
