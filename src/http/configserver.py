@@ -1,6 +1,8 @@
-from   .http import content_dict_from, is_http_get, is_http_post, response
+from   .http  import content_dict_from, is_http_get, is_http_post
+from   .pages import display_connecting_page, post_toggle_page, post_wifi_info_page
 import socket
 import select
+import time
 
 TIMEOUT_MS  = 1000
 BUFFER_SIZE = 1024
@@ -51,12 +53,12 @@ class Handler:
         if is_http_get(data):
             # TODO: handle GET
             print('GET')
-            paragraph = '<p>This is the config page for the hacked OITTM Smart Plug.</p>'
-            form      = '<form method="post" enctype="application/x-www-form-urlencoded"><input type="text" name="essid"/><input type="text" name="password"/><input type="submit"/></form>'
-            self.socket.sendall(response('OITTM Smart Plug', '{0}{1}'.format(paragraph, form)))
+            for chunk in post_wifi_info_page():
+                self.socket.sendall(chunk.encode())
         elif is_http_post(data):
             user_inputs = content_dict_from(data)
             # TODO: handle POST
             print('POST: {0}'.format(user_inputs))
-            self.socket.sendall(response('OITTM Smart Plug', 'Connecting to wifi...'))
+            for chunk in display_connecting_page():
+                self.socket.sendall(chunk.encode())
             return user_inputs
