@@ -1,3 +1,5 @@
+from unquote import unquote
+
 crlf                 = '\r\n'
 get_response_header  = 'HTTP/1.1 200 OK{crlf}Content-Type: text/html{crlf}{crlf}'.format(crlf=crlf)
 get_response_header  = get_response_header.encode()
@@ -27,14 +29,13 @@ def content_from(data):
 
 
 def content_dict_from(data):
-    print('data type: {0}'.format(type(data)))
     if type(data) == bytes:
         data = data.decode()
     result      = dict()
     expressions = content_from(data).split('&')
     for expression in expressions:
         key, value = expression.split('=')
-        result[key] = value
+        result[key] = unquote(value)
     return result
 
 

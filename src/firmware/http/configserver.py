@@ -11,13 +11,13 @@ class ConfigServer:
         self.socket = None
 
     def start(self):
-        print('binding to 8080')
         self.socket = socket.socket()
-        self.socket.bind(('0.0.0.0', 8080))
+        self.socket.bind(('0.0.0.0', 80))
         self.socket.listen(0)
         self.socket.setblocking(True)
         while True:
             (connection, address) = self.socket.accept()
+            print('client connected')
             with Handler(connection) as handler:
                 handler.read()
 
@@ -33,15 +33,14 @@ class Handler:
         self.socket = socket
 
     def __enter__(self):
-        print('entering handler...')
+        print('client connected')
         return self
 
     def __exit__(self, type, value, tb):
-        print('exiting handler...')
+        print('disconnected from client')
         self.socket.close()
 
     def read(self):
-        print('reading handler"')
         poller = select.poll()
         poller.register(self.socket, select.POLLIN)
         data = b''
@@ -49,10 +48,12 @@ class Handler:
             data += self.socket.recv(BUFFER_SIZE)
         if is_http_get(data):
             # TODO: handle GET
-            print('received HTTP GET')
-            self.socket.sendall(response('OITTM Smart Plug', 'This is the config page for the OITTM Smart Plug'))
+            print('GET')
+            paragraph = '<p>This is the config page for the hacked OITTM Smart Plug.</p>'
+            form      = '<form method="post" enctype="application/x-www-form-urlencoded"><input type="text" name="essid"/><input type="text" name="password"/><input type="submit"/></form>'
+            self.socket.sendall(response('OITTM Smart Plug', '{0}{1}'.format(paragraph, form)))
         elif is_http_post(data):
             user_inputs = content_dict_from(data)
             # TODO: handle POST
-            print('received HTTP POST with {0}'.format(user_inputs))
+            print('POST: {0}'.format(user_inputs))
             self.socket.sendall(response('OITTM Smart Plug', 'Connecting to wifi...'))
