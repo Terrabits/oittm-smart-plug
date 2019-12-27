@@ -19,7 +19,9 @@ class ConfigServer:
             (connection, address) = self.socket.accept()
             print('client connected')
             with Handler(connection) as handler:
-                handler.read()
+                user_inputs = handler.read()
+                if user_inputs:
+                    return user_inputs
 
     def stop(self):
         if not self.socket:
@@ -57,3 +59,4 @@ class Handler:
             # TODO: handle POST
             print('POST: {0}'.format(user_inputs))
             self.socket.sendall(response('OITTM Smart Plug', 'Connecting to wifi...'))
+            return user_inputs
