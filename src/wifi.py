@@ -21,15 +21,20 @@ class Wifi:
 
     # connect to wifi
     def connect(self, ssid, password, with_hostname='oittm-smart-plug'):
-        self.access_point.active(False)
         self.station.active(True)
-
         self.station.config(dhcp_hostname=with_hostname)
         self.station.connect(ssid, password)
 
+    @property
+    def connected(self):
+        return self.station.isconnected()
+
     def wait_for_station_connect(self):
-        while not self.station.isconnected():
-            pass
+        i = 100000
+        while not self.connected:
+            i -= 1
+            if i <= 0:
+                break
 
     def disconnect(self):
         self.station.disconnect()
