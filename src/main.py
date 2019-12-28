@@ -1,16 +1,18 @@
 # import micropython
-from   http import ConfigServer
+from   http      import ConfigServer
 import machine
-from   wifi import Wifi
+from   smartplug import SmartPlug
+from   wifi      import Wifi
 
+config        = None
 config_server = None
+smart_plug    = None
 wifi          = None
-wifi_config   = None
 
 
 def main():
     # micropython.alloc_emergency_exception_buf(100)
-    global config, config_server, wifi
+    global config, config_server, smart_plug, wifi
     wifi = Wifi()
     wifi.configure_access_point('oittm-smart-plug', '2019hacks')
 
@@ -31,9 +33,8 @@ def main():
     # turn access point off
     wifi.access_point.active(False)
 
-    # start toggle server
-    # TODO: start toggle server
-
+    # initialize smart plug control
+    smart_plug = SmartPlug()
 
 if __name__ == '__main__':
     main()
