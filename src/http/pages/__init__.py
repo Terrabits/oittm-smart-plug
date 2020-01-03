@@ -1,7 +1,7 @@
 # paths
-display_connecting_filename = '/http/pages/display-connecting.html'
-post_toggle_filename        = '/http/pages/post-toggle.html'
-post_wifi_info_filename     = '/http/pages/post-wifi-info.html'
+display_connecting_filename = 'http/pages/display-connecting.html'
+post_toggle_filename        = 'http/pages/post-toggle.html'
+post_wifi_info_filename     = 'http/pages/post-wifi-info.html'
 
 
 # page generators
