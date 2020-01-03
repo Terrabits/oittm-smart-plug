@@ -35,7 +35,7 @@ def content_dict_from(data):
     expressions = content_from(data).split('&')
     for expression in expressions:
         key, value = expression.split('=')
-        result[key] = unquote(value)
+        result[key] = unquote(value).decode()
     return result
 
 
