@@ -26,12 +26,13 @@ def main():
     password = config['password']
     wifi.connect(essid, password,
                  with_hostname='oittm-smart-plug')
-    wifi.wait_for_station_connect()
-    if not wifi.connected:
-        machine.reset()
 
     # turn access point off
     wifi.access_point.active(False)
+
+    wifi.wait_for_station_connect()
+    if not wifi.connected:
+        machine.reset()
 
     # initialize smart plug control
     smart_plug = SmartPlug()
