@@ -36,5 +36,6 @@ def main():
     # initialize smart plug control
     smart_plug = SmartPlug()
 
+
 if __name__ == '__main__':
     main()
