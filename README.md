@@ -1,9 +1,17 @@
 # OITTM Smart Plug Hack
 
-Hacking an ESP8266-based OITTM Smart Plug with Micropython.
+Yet another ESP8266-based smart plug hack.
 
-## References
+The smart plug starts in access point mode and serves the following pages via HTTP:
 
-- [MicroPython – Getting Started with MQTT on ESP32/ESP8266](https://randomnerdtutorials.com/micropython-mqtt-esp32-esp8266/)
-- [dhylands/rshell: Remote Shell for MicroPython](https://github.com/dhylands/rshell)
-- [micropython-lib/umqtt.simple at master · micropython/micropython-lib](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple)
+![Configure form](doc/screenshots/post-config.png)
+
+![Configure confirmation page](doc/screenshots/display-config.png)
+
+Once the configuration information is submitted, the smart plug will restart and attempt to connect to wifi and the mqtt broker. If successful, it will continue to function. If unsuccessful, it will restart in access point mode and you can try again.
+
+Pushing the button 10 times quickly (< 3 s) will cause the smart plug to reboot.
+
+Said another way:
+
+![state machine](doc/screenshots/main-state-machine.png)
