@@ -1,5 +1,5 @@
 from   .http  import content_dict_from, is_http_get, is_http_post
-from   .pages import display_connecting_page, post_toggle_page, post_config_page
+from   .pages import display_connecting_page, post_config_page
 import socket
 import select
 import time

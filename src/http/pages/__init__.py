@@ -1,7 +1,6 @@
 # paths
 display_connecting_filename = 'http/pages/display-connecting.html'
-post_toggle_filename        = 'http/pages/post-toggle.html'
-post_config_filename     = 'http/pages/post-config.html'
+post_config_filename        = 'http/pages/post-config.html'
 
 
 # page generators
@@ -16,10 +15,6 @@ def page_generator_for(filename):
 
 def display_connecting_page():
     return page_generator_for(display_connecting_filename)
-
-
-def post_toggle_page():
-    return page_generator_for(post_toggle_filename)
 
 
 def post_config_page():
