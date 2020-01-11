@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+esptool.py --chip esp32 --port /dev/tty.SLAB_USBtoUART --baud 460800 write_flash --erase-all --compress 0x1000 lib/firmware/esp32-idf3-20191220-v1.12.bin
