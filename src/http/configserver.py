@@ -1,5 +1,5 @@
 from   .http  import content_dict_from, is_http_get, is_http_post
-from   .pages import display_connecting_page, post_toggle_page, post_wifi_info_page
+from   .pages import display_connecting_page, post_toggle_page, post_config_page
 import socket
 import select
 import time
@@ -16,14 +16,19 @@ class ConfigServer:
         self.socket = socket.socket()
         self.socket.bind(('0.0.0.0', 80))
         self.socket.listen(0)
-        self.socket.setblocking(True)
-        while True:
-            (connection, address) = self.socket.accept()
-            print('client connected')
-            with Handler(connection) as handler:
-                user_inputs = handler.read()
-                if user_inputs:
-                    return user_inputs
+        self.socket.setblocking(False)
+
+    def loop_once(self):
+        try:
+            accept_result = self.socket.accept()
+            if not accept_result:
+                return
+        except OSError:
+            return
+        # continue with accepted client
+        (connection, address) = accept_result
+        with Handler(connection) as handler:
+            return handler.read()
 
     def stop(self):
         if not self.socket:
@@ -53,7 +58,7 @@ class Handler:
         if is_http_get(data):
             # TODO: handle GET
             print('GET')
-            for chunk in post_wifi_info_page():
+            for chunk in post_config_page():
                 self.socket.sendall(chunk.encode())
         elif is_http_post(data):
             user_inputs = content_dict_from(data)
@@ -62,3 +67,5 @@ class Handler:
             for chunk in display_connecting_page():
                 self.socket.sendall(chunk.encode())
             return user_inputs
+        else:
+            print('UNRECOGNIZED (VERB)')

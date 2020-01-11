@@ -51,6 +51,8 @@ class WLAN:
         assert self.is_station, 'cannot disconnect: not in STA mode'
         self._isconnected = False
 
+
+# export
 network.WLAN = WLAN
 
 # relative imports workaround

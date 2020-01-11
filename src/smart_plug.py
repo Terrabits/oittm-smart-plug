@@ -6,14 +6,17 @@ class SmartPlug(object):
     def __init__(self):
         self.mutex            = Mutex()
         self.toggle_callbacks = []
-        self.button_callback  = None
 
         self.state  = None
         self.led    = Pin(13, Pin.OUT)  # active low
         self.relay  = Pin( 4, Pin.OUT)
         self.button = Pin(12, Pin.IN )
-        self.set_button_callback(self.toggle)
         self.off()
+
+        def button_callback():
+            print('*button pressed')
+            self.toggle()
+        self.set_button_callback(button_callback)
 
     def on(self):
         if self.mutex.locked:
@@ -21,6 +24,7 @@ class SmartPlug(object):
         if self.state == 'on':
             return
         with self.mutex:
+            print('smart plug on')
             self.state = 'on'
             self.led.off()
             self.relay.on()
@@ -32,6 +36,7 @@ class SmartPlug(object):
         if self.mutex.locked:
             return
         with self.mutex:
+            print('smart plug off')
             self.state = 'off'
             self.led.on()
             self.relay.off()
@@ -54,12 +59,9 @@ class SmartPlug(object):
     # push button
     def set_button_callback(self, callback, trigger=Pin.IRQ_RISING):
         self.button_callback = callback
-
-        def callback_ignore_input(i):
+        def callback_ignore_input(pin_number):
             callback()
         self.button.irq(trigger=trigger, handler=callback_ignore_input)
 
     def push_button(self):
-        if not self.button_callback:
-            return
         self.button_callback()

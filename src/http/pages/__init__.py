@@ -1,7 +1,7 @@
 # paths
 display_connecting_filename = 'http/pages/display-connecting.html'
 post_toggle_filename        = 'http/pages/post-toggle.html'
-post_wifi_info_filename     = 'http/pages/post-wifi-info.html'
+post_config_filename     = 'http/pages/post-config.html'
 
 
 # page generators
@@ -22,5 +22,5 @@ def post_toggle_page():
     return page_generator_for(post_toggle_filename)
 
 
-def post_wifi_info_page():
-    return page_generator_for(post_wifi_info_filename)
+def post_config_page():
+    return page_generator_for(post_config_filename)

@@ -1,41 +1,31 @@
-# import micropython
-from   http      import ConfigServer
-import machine
-from   smartplug import SmartPlug
-from   wifi      import Wifi
+import micropython
+from   state_machine import StateMachine
+from   states        import start_transform, init_transform, config_load_transform, config_start_transform, ConfigAccessPointUp, ConfigHttpServe, config_complete_transform, run_transform, WifiUp, MqttUp, MainLoopOnce
 
-config        = None
-config_server = None
-smart_plug    = None
-wifi          = None
+main_state    = None
 
 
 def main():
-    # micropython.alloc_emergency_exception_buf(100)
-    global config, config_server, smart_plug, wifi
-    wifi = Wifi()
-    wifi.configure_access_point('oittm-smart-plug', '2019hacks')
+    global main_state
 
-    # config
-    wifi.wait_for_access_point_active()
-    config_server = ConfigServer()
-    config        = config_server.start()
+    main_state = StateMachine()
+    main_state.append_state('start', start_transform)
+    main_state.append_state('init',  init_transform)
+    main_state.append_state('run',   run_transform)
+    main_state.append_state('config/load',            config_load_transform)
+    main_state.append_state('config/start',           config_start_transform)
+    main_state.append_state('config/access_point_up', ConfigAccessPointUp().transform)
+    main_state.append_state('config/serve_http',      ConfigHttpServe    ().transform)
+    main_state.append_state('config/complete',        config_complete_transform)
+    main_state.append_state('wifi/up', WifiUp().transform)
+    main_state.append_state('mqtt/up', MqttUp().transform)
+    main_state.append_state('main/loop_once', MainLoopOnce().transform)
+    main_state.start_at('start')
 
-    # connect to wifi
-    essid    = config['essid']
-    password = config['password']
-    wifi.connect(essid, password,
-                 with_hostname='oittm-smart-plug')
-
-    # turn access point off
-    wifi.access_point.active(False)
-
-    wifi.wait_for_station_connect()
-    if not wifi.connected:
-        machine.reset()
-
-    # initialize smart plug control
-    smart_plug = SmartPlug()
+    def loop_once_and_schedule(dummy_arg=None):
+        main_state.loop_once()
+        micropython.schedule(loop_once_and_schedule, None)
+    loop_once_and_schedule()
 
 
 if __name__ == '__main__':
