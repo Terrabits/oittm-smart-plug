@@ -4,7 +4,7 @@ Yet another ESP8266-based smart plug hack. This one is on the Oittm Smart Plug I
 
 ![Amazon - Oittm WiFi Smart Plug listing](doc/amazon-oittm-smart-plug-listing.png)
 
-I referenced [this Not Enough Tech article](<>) which walks you through exactly how to get access to the ESP8266. From there, I began to code.
+I referenced [this Not Enough Tech article](https://notenoughtech.com/featured/esp8266-smart-plug/) which walks you through exactly how to get access to the ESP8266. From there, I began to code.
 
 ## User Interface
 
