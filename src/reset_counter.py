@@ -1,3 +1,4 @@
+from   config import Config
 import machine
 import time
 
@@ -20,4 +21,5 @@ class ResetCounter:
             self.clicks = 1
         self.last_time = this_time
         if self.clicks >= RESET_COUNT:
+            Config().delete()
             machine.reset()

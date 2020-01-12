@@ -24,7 +24,7 @@ The smart plug will then restart and attempt to connect to WiFi and the MQTT bro
 
 ### Hard Reset
 
-Pushing the button 10 times quickly (&lt; 3 s) will cause the smart plug to reboot.
+Pushing the button 10 times quickly (in &lt; 3 s) will cause any saved settings to be deleted and the smart plug to perform a hard reboot.
 
 ### MQTT
 
@@ -68,6 +68,26 @@ The operation is summarized by the state diagram, below.
 
 ![state machine](doc/screenshots/main-state-machine.png)
 
+### Configuration
+
+The configuration (handled by states with the `config/` prefix) is saved and recalled via the `Config` class in `src/config.py`.
+
+All saved settings can be reset from the repl with the following snippet:
+
+```python
+from   config import Config
+import machine
+
+# delete all saved state
+config = Config()
+config.delete()
+
+# hard reboot
+machine.reset()
+```
+
+This will force the smart plug to go into access point mode for reconfiguration.
+
 ### HTTP Server
 
 I micro-HTTP server is included in `src/http`. This server is just "big" enough to handle this application.
@@ -79,3 +99,7 @@ It is not considered a complete or secure HTTP implementation.
 As this hack uses MQTT, it requires access to a broker (server) on your network. MQTT is configured along with WiFi via the configuration page.
 
 All MQTT settings are ultimately editable in `src/mqtt.py`.
+
+### Wifi
+
+Wifi control is implemented in `src/wifi.py`.
