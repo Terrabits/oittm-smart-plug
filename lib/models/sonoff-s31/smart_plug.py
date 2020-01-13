@@ -1,6 +1,9 @@
 from machine import Pin
 from mutex   import Mutex
 
+# pinout taken from:
+# https://community.blynk.cc/t/hacking-the-new-itead-studio-sonoff-s31/21532
+
 
 class SmartPlug(object):
     def __init__(self):
